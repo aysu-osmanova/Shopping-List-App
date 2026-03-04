@@ -31,40 +31,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             ShoppingListAppTheme {
 
-                var sItems by remember { mutableStateOf(listOf<ShoppingItem>()) }
-
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Column(modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding),
-                        verticalArrangement = Arrangement.Center
-                    ){
-                        Button(
-                            {},
-                            modifier = Modifier.align(Alignment.CenterHorizontally)
-                        ){
-                            Text("Add Item")
-                        }
-                        LazyColumn(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(16.dp)
-                        ){
-                            items(sItems){
-
-                            }
-                        }
-                    }
-
-
-                    }
-                }
+                ShoppingListApp()
             }
         }
     }
-data class ShoppingItem( val id: Int,
-                         var name: String,
-                         var quantity: Int,
-                         var isEditing: Boolean=false
-
-)
+}
