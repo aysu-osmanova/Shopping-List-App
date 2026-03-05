@@ -59,6 +59,8 @@ fun ShoppingListApp() {
             Button(
                 {showDialog=true},
                 modifier = Modifier.align(Alignment.CenterHorizontally)
+                    .padding(16.dp)
+
             ) {
                 Text("Add Item")
             }
@@ -68,7 +70,28 @@ fun ShoppingListApp() {
                     .padding(16.dp)
             ) {
                 items(sItems) {
-                    ShoppingListItem(it, {}, {})
+                    item ->
+                    if ( item.isEditing){
+                        ShoppingItemEditor(item = item, onEditComplete = {
+                            editedName, editedQuantity ->
+                            sItems = sItems.map { it.copy(isEditing = false)}
+                            val editedItem = sItems.find { it.id == item.id}
+                            editedItem?.let {
+                                it.name = editedName
+                                it.quantity = editedQuantity
+                            }
+                        })
+                    }else{
+                           ShoppingListItem(item= item,
+                               onEditClick  = {
+                               sItems =sItems.map { it.copy(isEditing = it.id == item.id )}
+                           },
+                               onDeleteClick = {
+                               sItems= sItems-item
+                           })
+                        }
+
+                    }
                 }
             }
         }
@@ -113,7 +136,6 @@ fun ShoppingListApp() {
                 }
             )
         }
-    }
 }
 
 @Composable
@@ -165,8 +187,11 @@ fun ShoppingListItem(
     Row(
         modifier = Modifier.padding(8.dp).fillMaxWidth().border(
             border = BorderStroke(2.dp, Color(0xFF3F51B5)),
-            shape = RoundedCornerShape(30)
+            shape = RoundedCornerShape(16.dp)
         )
+            .background(Color(0xFFEAEBFC)),
+
+        horizontalArrangement = Arrangement.SpaceBetween
     ){
         Text(item.name, modifier = Modifier.padding(8.dp))
         Text("Qty: ${item.quantity}", modifier = Modifier.padding(8.dp))
