@@ -2,6 +2,7 @@ package com.example.shoppinglistapp
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -62,7 +63,29 @@ fun ShoppingListApp() {
         if (showDialog){
 
             AlertDialog({showDialog=false},
-                {},
+                {
+                    Row(modifier = Modifier.fillMaxWidth().padding(8.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween) {
+                        Button({
+                            if( itemName.isNotBlank()){
+                                val newItem = ShoppingItem(
+                                    sItems.size+1,
+                                    name = itemName,
+                                    itemQuantity.toInt()
+                                )
+                                sItems = sItems + newItem
+                                showDialog = false
+                                itemName = ""
+                            }
+
+                        }) {
+                            Text("Add")
+                        }
+                        Button({showDialog=false}) {
+                            Text("Cancel")
+                        }
+                    }
+                },
             title ={ Text("Add Shopping Item")},
                 text = {
                     Column() {
